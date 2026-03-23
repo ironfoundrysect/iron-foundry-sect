@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Sect — Iron Foundry Sect</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">⚙ <span>Iron Foundry</span> Sect</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="techniques.html">Techniques</a></li>
+    <li><a href="forge.html">The Forge</a></li>
+    <li><a href="sect.html">The Sect</a></li>
+    <li><a href="profile.html" id="profile-nav-link" class="hidden">Profile</a></li>
+    <li><a href="sect.html#admin" id="admin-nav-link" class="hidden">⚙ Admin</a></li>
+  </ul>
+  <div class="nav-auth">
+    <div id="user-display"></div>
+    <button class="btn-nav" id="btn-login" onclick="openModal('modal-login')">Login</button>
+    <button class="btn-nav btn-nav-solid" id="btn-join" onclick="openModal('modal-register')">Join Sect</button>
+    <button class="btn-nav hidden" id="btn-logout">Logout</button>
+    <div class="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-content">
+    <span class="section-label">▸ Brotherhood of Iron</span>
+    <h1 class="section-title">The Sect</h1>
+    <p style="color:var(--text-secondary);max-width:500px;margin:0 auto;">The builders, makers, and engineers who walk the path of cultivation together.</p>
+  </div>
+</div>
+
+<!-- OWNER BIO -->
+<section style="background:var(--bg-primary);border-bottom:1px solid var(--border);">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:2.5rem;align-items:center;max-width:800px;">
+      <div id="owner-avatar" style="width:100px;height:100px;border-radius:50%;background:var(--bg-tertiary);border:3px solid var(--accent-gold);display:flex;align-items:center;justify-content:center;font-size:2.5rem;flex-shrink:0;"></div>
+      <div>
+        <span class="section-label">▸ Sect Leader</span>
+        <h2 style="font-family:var(--font-display);font-size:1.8rem;letter-spacing:0.05em;margin-bottom:0.25rem;">Niles Adderley</h2>
+        <span class="role-badge role-leader" style="font-size:0.8rem;margin-bottom:1rem;display:inline-block;">Sect Leader</span>
+        <div id="owner-bio-display" style="color:var(--text-secondary);font-size:1rem;line-height:1.7;margin-top:0.75rem;">Loading...</div>
+        <div id="owner-bio-edit" style="display:none;margin-top:1rem;">
+          <textarea id="owner-bio-input" rows="4" style="width:100%;background:var(--bg-tertiary);border:1px solid var(--border);color:var(--text-primary);padding:0.75rem 1rem;font-family:var(--font-body);font-size:0.95rem;border-radius:2px;outline:none;resize:vertical;margin-bottom:0.75rem;"></textarea>
+          <div style="display:flex;gap:0.75rem;">
+            <button class="btn btn-primary" onclick="saveOwnerBio()" style="font-size:0.8rem;padding:0.6rem 1.25rem;">💾 Save</button>
+            <button class="btn btn-secondary" onclick="cancelOwnerBioEdit()" style="font-size:0.8rem;padding:0.6rem 1.25rem;">Cancel</button>
+          </div>
+        </div>
+        <button id="edit-bio-btn" class="btn btn-outline hidden" onclick="editOwnerBio()" style="margin-top:1rem;font-size:0.75rem;padding:0.4rem 1rem;">✏️ Edit Bio</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROLES -->
+<section style="background:var(--bg-secondary);">
+  <div class="container">
+    <span class="section-label">▸ The Hierarchy</span>
+    <h2 class="section-title">Ranks of the Sect</h2>
+    <div class="section-divider"></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;">
+      <div class="forge-card">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+          <div style="width:36px;height:36px;background:#0d2010;border:1px solid #4caf5030;border-radius:50%;display:flex;align-items:center;justify-content:center;">🌱</div>
+          <span class="role-badge role-outer">Outer Disciple</span>
+        </div>
+        <p style="font-size:0.9rem;color:var(--text-muted);">The entry rank. Granted upon registration. Begin by studying techniques.</p>
+      </div>
+      <div class="forge-card">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+          <div style="width:36px;height:36px;background:#0d1020;border:1px solid #5c9eff30;border-radius:50%;display:flex;align-items:center;justify-content:center;">⚡</div>
+          <span class="role-badge role-core">Core Disciple</span>
+        </div>
+        <p style="font-size:0.9rem;color:var(--text-muted);">Awarded for demonstrated skill. Can submit and document new Techniques.</p>
+      </div>
+      <div class="forge-card">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+          <div style="width:36px;height:36px;background:#2a1a2a;border:1px solid #c678dd30;border-radius:50%;display:flex;align-items:center;justify-content:center;">🔥</div>
+          <span class="role-badge role-elder">Elder</span>
+        </div>
+        <p style="font-size:0.9rem;color:var(--text-muted);">Veteran builders who guide the community and review submissions.</p>
+      </div>
+      <div class="forge-card">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+          <div style="width:36px;height:36px;background:#2a1a0a;border:1px solid var(--border-accent);border-radius:50%;display:flex;align-items:center;justify-content:center;">👑</div>
+          <span class="role-badge role-leader">Sect Leader</span>
+        </div>
+        <p style="font-size:0.9rem;color:var(--text-muted);">Absolute authority. Manages the site and assigns all roles.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MEMBERS -->
+<section id="members">
+  <div class="container">
+    <span class="section-label">▸ The Brotherhood</span>
+    <h2 class="section-title">Current Members</h2>
+    <div class="section-divider"></div>
+    <div id="dynamic-members">
+      <p style="color:var(--text-muted);font-family:var(--font-mono);font-size:0.85rem;">Loading disciples...</p>
+    </div>
+  </div>
+</section>
+
+<!-- JOIN -->
+<section style="background:var(--bg-secondary);">
+  <div class="container">
+    <div class="join-box" style="max-width:550px;">
+      <span class="section-label" style="text-align:center;display:block;">▸ Take Your First Step</span>
+      <h2 class="section-title">Join the Sect</h2>
+      <p>Register your disciple name and begin your cultivation journey.</p>
+      <button class="btn btn-primary" onclick="openModal('modal-register')">⚙ Register Now</button>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL LINKS ADMIN -->
+<section id="socials-admin" style="background:var(--bg-secondary);display:none;">
+  <div class="container">
+    <span class="section-label">▸ Sect Leader Only</span>
+    <h2 class="section-title">Community Links</h2>
+    <div class="section-divider"></div>
+    <p style="color:var(--text-muted);margin-bottom:2rem;font-family:var(--font-mono);font-size:0.85rem;">Set the social links that appear in footers across the site.</p>
+    <div style="max-width:500px;">
+      <div class="social-input-row" style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
+        <div style="width:36px;height:36px;background:var(--bg-tertiary);border:1px solid var(--border);border-radius:2px;display:flex;align-items:center;justify-content:center;">💬</div>
+        <input type="url" id="social-discord" placeholder="https://discord.gg/invite" style="flex:1;background:var(--bg-tertiary);border:1px solid var(--border);color:var(--text-primary);padding:0.6rem 1rem;font-family:var(--font-mono);font-size:0.85rem;border-radius:2px;outline:none;" />
+      </div>
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
+        <div style="width:36px;height:36px;background:var(--bg-tertiary);border:1px solid var(--border);border-radius:2px;display:flex;align-items:center;justify-content:center;">▶</div>
+        <input type="url" id="social-youtube" placeholder="https://youtube.com/@channel" style="flex:1;background:var(--bg-tertiary);border:1px solid var(--border);color:var(--text-primary);padding:0.6rem 1rem;font-family:var(--font-mono);font-size:0.85rem;border-radius:2px;outline:none;" />
+      </div>
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
+        <div style="width:36px;height:36px;background:var(--bg-tertiary);border:1px solid var(--border);border-radius:2px;display:flex;align-items:center;justify-content:center;">📸</div>
+        <input type="url" id="social-instagram" placeholder="https://instagram.com/username" style="flex:1;background:var(--bg-tertiary);border:1px solid var(--border);color:var(--text-primary);padding:0.6rem 1rem;font-family:var(--font-mono);font-size:0.85rem;border-radius:2px;outline:none;" />
+      </div>
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem;">
+        <div style="width:36px;height:36px;background:var(--bg-tertiary);border:1px solid var(--border);border-radius:2px;display:flex;align-items:center;justify-content:center;">✗</div>
+        <input type="url" id="social-twitter" placeholder="https://twitter.com/username" style="flex:1;background:var(--bg-tertiary);border:1px solid var(--border);color:var(--text-primary);padding:0.6rem 1rem;font-family:var(--font-mono);font-size:0.85rem;border-radius:2px;outline:none;" />
+      </div>
+      <div id="socials-status" class="alert"></div>
+      <button class="btn btn-primary" onclick="saveSocials()">💾 Save Links</button>
+    </div>
+  </div>
+</section>
+
+<!-- ADMIN PANEL -->
+<section id="admin" style="background:var(--bg-primary);" class="admin-section">
+  <div class="container">
+    <span class="section-label">▸ Sect Leader Only</span>
+    <h2 class="section-title">Admin Panel</h2>
+    <div class="section-divider"></div>
+    <p style="color:var(--text-muted);margin-bottom:2rem;font-family:var(--font-mono);font-size:0.85rem;">Manage disciple roles. Changes take effect immediately across all devices.</p>
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead><tr><th>Username</th><th>Email</th><th>Role</th><th>Action</th></tr></thead>
+        <tbody id="admin-tbody">
+          <tr><td colspan="4" style="color:var(--text-muted);font-family:var(--font-mono);font-size:0.8rem;">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">⚙ Iron Foundry Sect</div>
+  <div class="footer-links">
+    <a href="index.html">Home</a><a href="techniques.html">Techniques</a>
+    <a href="forge.html">The Forge</a><a href="sect.html">The Sect</a>
+  </div>
+  <p class="footer-copy">© Iron Foundry Sect — Forged in the fires of creation.</p>
+</footer>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="modal-login">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-login')">✕</button>
+    <div class="modal-title">Return to the Forge</div>
+    <div class="modal-subtitle">▸ Disciple Login</div>
+    <form id="login-form">
+      <div class="form-group"><label>Email</label><input type="email" id="login-email" placeholder="your@email.com" required /></div>
+      <div class="form-group"><label>Password</label><input type="password" id="login-password" placeholder="••••••••" required /></div>
+      <div class="form-error" id="login-error"></div>
+      <button type="submit" class="btn btn-primary w-full mt-2">Enter the Sect</button>
+    </form>
+    <div class="modal-switch">New here? <a onclick="closeModal('modal-login');openModal('modal-register')">Join the Sect →</a></div>
+  </div>
+</div>
+
+<!-- REGISTER MODAL -->
+<div class="modal-overlay" id="modal-register">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-register')">✕</button>
+    <div class="modal-title">Begin Cultivation</div>
+    <div class="modal-subtitle">▸ Register as Outer Disciple</div>
+    <form id="register-form">
+      <div class="form-group"><label>Username</label><input type="text" id="reg-username" placeholder="Choose your sect name" required /></div>
+      <div class="form-group"><label>Email</label><input type="email" id="reg-email" placeholder="your@email.com" required /></div>
+      <div class="form-group"><label>Password</label><input type="password" id="reg-password" placeholder="Min 6 characters" required /></div>
+      <div class="form-error" id="reg-error"></div>
+      <button type="submit" class="btn btn-primary w-full mt-2">⚙ Join the Sect</button>
+    </form>
+    <div class="modal-switch">Already a disciple? <a onclick="closeModal('modal-register');openModal('modal-login')">Login →</a></div>
+  </div>
+</div>
+
+<script type="module" src="script.js"></script>
+<script type="module">
+import { auth, db } from './firebase-config.js';
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { doc, getDoc, updateDoc, collection, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+// Load owner bio
+async function loadOwnerBio() {
+  const snap = await getDocs(collection(db, 'users'));
+  let ownerData = null;
+  snap.forEach(d => { if (d.data().role === 'sect-leader') ownerData = d.data(); });
+
+  const bioDisplay = document.getElementById('owner-bio-display');
+  const avatarEl   = document.getElementById('owner-avatar');
+
+  if (ownerData) {
+    bioDisplay.textContent = ownerData.bio || 'The Sect Leader has not yet written their bio. Check back soon.';
+    if (ownerData.photoURL) {
+      avatarEl.innerHTML = `<img src="${ownerData.photoURL}" style="width:100px;height:100px;border-radius:50%;object-fit:cover;">`;
+    } else {
+      avatarEl.textContent = 'N';
+    }
+  } else {
+    bioDisplay.textContent = 'The Iron Foundry Sect was founded to forge engineers through real projects.';
+    avatarEl.textContent = 'N';
+  }
+}
+
+loadOwnerBio();
+
+// Show edit button only to sect leader
+onAuthStateChanged(auth, async (user) => {
+  if (!user) return;
+  const snap = await getDoc(doc(db, 'users', user.uid));
+  if (snap.exists() && snap.data().role === 'sect-leader') {
+    document.getElementById('edit-bio-btn')?.classList.remove('hidden');
+    const socialsSection = document.getElementById('socials-admin');
+    if (socialsSection) socialsSection.style.display = 'block';
+    loadSocialsAdmin();
+  }
+});
+
+async function loadSocialsAdmin() {
+  const snap = await getDoc(doc(db, 'settings', 'socials'));
+  if (!snap.exists()) return;
+  const d = snap.data();
+  if (d.discord)   document.getElementById('social-discord').value   = d.discord;
+  if (d.youtube)   document.getElementById('social-youtube').value   = d.youtube;
+  if (d.instagram) document.getElementById('social-instagram').value = d.instagram;
+  if (d.twitter)   document.getElementById('social-twitter').value   = d.twitter;
+}
+
+window.saveSocials = async function() {
+  await setDoc(doc(db, 'settings', 'socials'), {
+    discord:   document.getElementById('social-discord').value.trim(),
+    youtube:   document.getElementById('social-youtube').value.trim(),
+    instagram: document.getElementById('social-instagram').value.trim(),
+    twitter:   document.getElementById('social-twitter').value.trim(),
+  });
+  const s = document.getElementById('socials-status');
+  s.textContent = '✓ Links saved!';
+  s.className = 'alert alert-success show';
+  setTimeout(() => s.classList.remove('show'), 3000);
+}
+
+window.editOwnerBio = function() {
+  const current = document.getElementById('owner-bio-display').textContent;
+  document.getElementById('owner-bio-input').value = current;
+  document.getElementById('owner-bio-display').style.display = 'none';
+  document.getElementById('owner-bio-edit').style.display = 'block';
+  document.getElementById('edit-bio-btn').style.display = 'none';
+}
+
+window.cancelOwnerBioEdit = function() {
+  document.getElementById('owner-bio-display').style.display = 'block';
+  document.getElementById('owner-bio-edit').style.display = 'none';
+  document.getElementById('edit-bio-btn').style.display = '';
+}
+
+window.saveOwnerBio = async function() {
+  const user = auth.currentUser;
+  if (!user) return;
+  const newBio = document.getElementById('owner-bio-input').value.trim();
+  await updateDoc(doc(db, 'users', user.uid), { bio: newBio });
+  document.getElementById('owner-bio-display').textContent = newBio;
+  cancelOwnerBioEdit();
+}
+</script>
+</html>

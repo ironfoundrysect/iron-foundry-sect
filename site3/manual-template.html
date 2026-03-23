@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Autonomous Rover — Iron Foundry Sect</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">⚙ <span>Iron Foundry</span> Sect</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="techniques.html">Techniques</a></li>
+    <li><a href="blog.html">Scrolls</a></li>
+    <li><a href="members.html">Members</a></li>
+    <li><a href="forge.html">The Forge</a></li>
+    <li><a href="sect.html">The Sect</a></li>
+    <li><a href="profile.html" id="profile-nav-link" class="hidden">Profile</a></li>
+    <li><a href="sect.html#admin" id="admin-nav-link" class="hidden">⚙ Admin</a></li>
+  </ul>
+  <div class="nav-auth">
+    <div id="user-display"></div>
+    <button class="btn-nav" id="btn-login" onclick="openModal('modal-login')">Login</button>
+    <button class="btn-nav btn-nav-solid" id="btn-join" onclick="openModal('modal-register')">Join Sect</button>
+    <button class="btn-nav hidden" id="btn-logout">Logout</button>
+    <div class="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<div class="manual-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="manual-sidebar">
+    <div class="manual-nav">
+      <h4>▸ Manual Sections</h4>
+      <a href="#overview">Overview</a>
+      <a href="#artifacts">Artifacts Required</a>
+      <a href="#steps">Cultivation Steps</a>
+      <a href="#diagrams">Diagrams</a>
+      <a href="#code">Source Code</a>
+      <a href="#outcome">Outcome</a>
+    </div>
+    <div style="margin-top:1rem;">
+      <a href="techniques.html" class="btn btn-outline" style="width:100%;text-align:center;font-size:0.75rem;">← Back to Library</a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main>
+
+    <div class="manual-section" id="overview">
+      <div class="manual-meta">
+        <div class="meta-chip">Technique: <span>Autonomous Rover</span></div>
+        <div class="meta-chip">Rank: <span style="color:#c678dd">Advanced</span></div>
+        <div class="meta-chip">Category: <span>Robotics</span></div>
+        <div class="meta-chip">Author: <span>SectLeader</span></div>
+      </div>
+      <h2>Technique Overview</h2>
+      <p>The Autonomous Rover is a wheeled robotic platform capable of navigating an environment without human input. Using an array of ultrasonic sensors, it detects and avoids obstacles in real time. This technique teaches motor control, sensor integration, and basic autonomous decision logic.</p>
+      <p style="margin-top:1rem;">This is a flagship Advanced technique of the Iron Foundry Sect — expect to spend 2–4 weeks on the full build and tune cycle.</p>
+    </div>
+
+    <div class="manual-section" id="artifacts">
+      <h2>Artifacts Required</h2>
+      <p style="margin-bottom:1.5rem;color:var(--text-muted);">Gather these components before beginning cultivation. Substitutions are noted where applicable.</p>
+      <div class="step-item"><div class="step-num">🔩</div><div><strong>Arduino Uno R3</strong> — or compatible microcontroller (Nano, Mega)</div></div>
+      <div class="step-item"><div class="step-num">⚙</div><div><strong>L298N Motor Driver Module</strong> — dual H-bridge for DC motor control</div></div>
+      <div class="step-item"><div class="step-num">📡</div><div><strong>HC-SR04 Ultrasonic Sensors (x3)</strong> — front, left, right placement</div></div>
+      <div class="step-item"><div class="step-num">🔋</div><div><strong>DC Gear Motors (x4) + Wheels</strong> — TT motors recommended for chassis</div></div>
+      <div class="step-item"><div class="step-num">🔌</div><div><strong>18650 Battery Pack (7.4V)</strong> — with XT60 connector and power switch</div></div>
+      <div class="step-item"><div class="step-num">🗜️</div><div><strong>Chassis Frame</strong> — acrylic or 3D printed platform, min 20cm x 15cm</div></div>
+      <div class="step-item"><div class="step-num">📎</div><div><strong>Jumper Wires, Breadboard, Zip Ties</strong> — standard wiring materials</div></div>
+    </div>
+
+    <div class="manual-section" id="steps">
+      <h2>Cultivation Steps</h2>
+
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div>
+          <strong>Assemble the chassis.</strong>
+          <p style="color:var(--text-muted);margin-top:0.25rem;">Mount the four gear motors to the corners of the chassis frame. Secure with M3 bolts. Attach wheels firmly. Ensure the frame is level and motors are symmetrically placed.</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div>
+          <strong>Wire the motor driver.</strong>
+          <p style="color:var(--text-muted);margin-top:0.25rem;">Connect motor pairs to OUT1/OUT2 and OUT3/OUT4 on the L298N. Connect ENA/ENB to PWM pins on Arduino (pins 5, 6). Connect IN1–IN4 to digital pins 7, 8, 9, 10.</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div>
+          <strong>Mount and wire the sensors.</strong>
+          <p style="color:var(--text-muted);margin-top:0.25rem;">Attach HC-SR04 sensors at the front, left-front, and right-front positions. Connect VCC to 5V, GND to GND, and TRIG/ECHO to digital pins 2/3, 4/5, 11/12 respectively.</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div>
+          <strong>Upload the firmware.</strong>
+          <p style="color:var(--text-muted);margin-top:0.25rem;">Clone the repository below. Open <code style="color:var(--accent-gold);font-family:var(--font-mono)">rover_main.ino</code> in Arduino IDE. Select your board and COM port. Upload to the Arduino.</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">5</div>
+        <div>
+          <strong>Power on and calibrate.</strong>
+          <p style="color:var(--text-muted);margin-top:0.25rem;">Connect the battery pack. Open Serial Monitor at 9600 baud to observe sensor readings. Adjust the OBSTACLE_DISTANCE constant if the rover detects too early or too late.</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">6</div>
+        <div>
+          <strong>Test in open space first.</strong>
+          <p style="color:var(--text-muted);margin-top:0.25rem;">Place the rover on a flat surface with clear obstacles. Observe its avoidance behavior. Tune motor speeds in the code until the rover drives straight and turns consistently.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="manual-section" id="diagrams">
+      <h2>Diagrams</h2>
+      <p style="color:var(--text-muted);margin-bottom:1.5rem;">Wiring schematics and physical layout diagrams. Replace these placeholders with your actual photos/diagrams.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;">
+        <div style="background:var(--bg-tertiary);border:1px solid var(--border);aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-family:var(--font-mono);font-size:0.8rem;border-radius:2px;">[ Wiring Diagram ]</div>
+        <div style="background:var(--bg-tertiary);border:1px solid var(--border);aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-family:var(--font-mono);font-size:0.8rem;border-radius:2px;">[ Chassis Layout ]</div>
+        <div style="background:var(--bg-tertiary);border:1px solid var(--border);aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-family:var(--font-mono);font-size:0.8rem;border-radius:2px;">[ Final Build Photo ]</div>
+      </div>
+    </div>
+
+    <div class="manual-section" id="code">
+      <h2>Source Code</h2>
+      <p style="color:var(--text-muted);margin-bottom:1rem;">Full source available on GitHub. Core logic excerpt below:</p>
+      <a href="https://github.com" class="btn btn-outline" target="_blank" style="margin-bottom:1.5rem;display:inline-flex;">🔗 View on GitHub</a>
+      <div class="code-block">
+// rover_main.ino — Iron Foundry Sect
+#define OBSTACLE_DISTANCE 20  // cm
+
+void loop() {
+  int frontDist = readSensor(TRIG_F, ECHO_F);
+
+  if (frontDist &lt; OBSTACLE_DISTANCE) {
+    stopMotors();
+    delay(300);
+    turnRight();
+    delay(500);
+  } else {
+    moveForward();
+  }
+}
+      </div>
+    </div>
+
+    <div class="manual-section" id="outcome">
+      <h2>Outcome & Lessons Learned</h2>
+      <p>After completing this technique, the rover successfully navigated a maze environment with an obstacle avoidance success rate of ~92%. Key findings:</p>
+      <ul style="margin-top:1rem;">
+        <li>Motor speed matching is critical — even slightly mismatched motors cause drift.</li>
+        <li>Ultrasonic sensors have a blind spot below 2cm — mount them at an angle.</li>
+        <li>A third rear sensor would prevent wall-collision during reverse maneuvers.</li>
+        <li>Next iteration: add encoders for odometry and closed-loop speed control.</li>
+      </ul>
+    </div>
+
+  </main>
+</div>
+
+<footer>
+  <div class="footer-logo">⚙ Iron Foundry Sect</div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="techniques.html">Techniques</a>
+    <a href="forge.html">The Forge</a>
+    <a href="sect.html">The Sect</a>
+  </div>
+  <p class="footer-copy">© Iron Foundry Sect — Forged in the fires of creation.</p>
+</footer>
+
+<div class="modal-overlay" id="modal-login">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-login')">✕</button>
+    <div class="modal-title">Return to the Forge</div>
+    <div class="modal-subtitle">▸ Disciple Login</div>
+    <form id="login-form">
+      <div class="form-group"><label>Username</label><input type="text" id="login-email" type="email" placeholder="your@email.com" required /></div>
+      <div class="form-group"><label>Password</label><input type="password" id="login-password" placeholder="••••••••" required /></div>
+      <div class="form-error" id="login-error"></div>
+      <button type="submit" class="btn btn-primary w-full mt-2">Enter the Sect</button>
+    </form>
+    <div class="modal-switch">New here? <a onclick="closeModal('modal-login');openModal('modal-register')">Join the Sect →</a></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-register">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-register')">✕</button>
+    <div class="modal-title">Begin Cultivation</div>
+    <div class="modal-subtitle">▸ Register as Outer Disciple</div>
+    <form id="register-form">
+      <div class="form-group"><label>Username</label><input type="text" id="reg-username" placeholder="Choose your sect name" required /></div>
+      <div class="form-group"><label>Email</label><input type="email" id="reg-email" placeholder="your@email.com" /></div>
+      <div class="form-group"><label>Password</label><input type="password" id="reg-password" placeholder="Min 6 characters" required /></div>
+      <div class="form-error" id="reg-error"></div>
+      <button type="submit" class="btn btn-primary w-full mt-2">⚙ Join the Sect</button>
+    </form>
+    <div class="modal-switch">Already a disciple? <a onclick="closeModal('modal-register');openModal('modal-login')">Login →</a></div>
+  </div>
+</div>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>
