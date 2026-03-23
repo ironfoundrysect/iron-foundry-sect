@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iron Foundry Sect</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">⚙ <span>Iron Foundry</span> Sect</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="techniques.html">Techniques</a></li>
+    <li><a href="forge.html">The Forge</a></li>
+    <li><a href="sect.html">The Sect</a></li>
+    <li><a href="profile.html" id="profile-nav-link" class="hidden">Profile</a></li>
+    <li><a href="sect.html#admin" id="admin-nav-link" class="hidden">⚙ Admin</a></li>
+  </ul>
+  <div class="nav-auth">
+    <div id="user-display"></div>
+    <button class="btn-nav" id="btn-login" onclick="openModal('modal-login')">Login</button>
+    <button class="btn-nav btn-nav-solid" id="btn-join" onclick="openModal('modal-register')">Join Sect</button>
+    <button class="btn-nav hidden" id="btn-logout">Logout</button>
+    <div class="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-rune">铁</div>
+  <div class="hero-content">
+    <span class="hero-emblem">⚙</span>
+    <div class="hero-sect-label">▸ Est. in the Age of Creation ◂</div>
+    <h1>Iron Foundry<span class="line-gold">Sect</span></h1>
+    <p class="hero-tagline">Forging knowledge through engineering and creation.</p>
+    <div class="hero-divider"></div>
+    <div class="hero-buttons">
+      <a href="forge.html" class="btn btn-primary">⚒ Enter the Forge</a>
+      <a href="techniques.html" class="btn btn-secondary">📜 View Techniques</a>
+      <a href="sect.html" class="btn btn-outline">⚔ Sect Members</a>
+    </div>
+  </div>
+</section>
+
+<section class="about-section" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text">
+        <span class="section-label">▸ Ancient Scrolls</span>
+        <h2 class="section-title">What is the Iron Foundry Sect?</h2>
+        <div class="section-divider"></div>
+        <p>The <strong>Iron Foundry Sect</strong> is a community of engineers, builders, and makers who believe that true mastery is earned through creation — not memorization.</p>
+        <p>Like disciples of an ancient cultivation sect, our members advance through <strong>ranks of technical skill</strong> by completing real engineering projects. From circuits to code, from 3D printers to autonomous rovers.</p>
+        <p>We call our projects <strong>Techniques</strong>, our workshop <strong>The Forge</strong>, and our documentation <strong>Manuals</strong>. Because what you build should be worthy of legend.</p>
+        <div class="mt-3"><a href="sect.html" class="btn btn-outline">Learn the Way →</a></div>
+      </div>
+      <div class="about-pillars">
+        <div class="pillar"><div class="pillar-icon">🔥</div><h4>Build First</h4><p>Theory follows action. Pick up the tools.</p></div>
+        <div class="pillar"><div class="pillar-icon">📜</div><h4>Document All</h4><p>Every technique becomes a manual for the next disciple.</p></div>
+        <div class="pillar"><div class="pillar-icon">⚔</div><h4>Cultivate Skills</h4><p>Rank up from Outer Disciple to Sect Leader.</p></div>
+        <div class="pillar"><div class="pillar-icon">🤝</div><h4>Forge Together</h4><p>The sect is stronger than any single builder.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="techniques-section" id="techniques">
+  <div class="container">
+    <span class="section-label">▸ Sacred Scrolls</span>
+    <h2 class="section-title">Featured Techniques</h2>
+    <div class="section-divider"></div>
+    <div class="techniques-grid">
+      <a href="manual-template.html" class="technique-card">
+        <div class="card-header"><span class="card-icon">🤖</span><span class="card-rank rank-advanced">Advanced</span></div>
+        <div class="card-body"><h3>Autonomous Rover</h3><p>A self-navigating wheeled robot using ultrasonic sensors and motor drivers.</p></div>
+        <div class="card-footer">View Manual →</div>
+      </a>
+      <a href="manual-template.html" class="technique-card">
+        <div class="card-header"><span class="card-icon">🖥️</span><span class="card-rank rank-intermediate">Intermediate</span></div>
+        <div class="card-body"><h3>AI Workstation</h3><p>A custom-built PC optimized for machine learning and AI inference.</p></div>
+        <div class="card-footer">View Manual →</div>
+      </a>
+      <a href="manual-template.html" class="technique-card">
+        <div class="card-header"><span class="card-icon">🦾</span><span class="card-rank rank-advanced">Advanced</span></div>
+        <div class="card-body"><h3>Robotic Arm</h3><p>A 4-DOF servo-controlled robotic arm with inverse kinematics.</p></div>
+        <div class="card-footer">View Manual →</div>
+      </a>
+      <a href="manual-template.html" class="technique-card">
+        <div class="card-header"><span class="card-icon">📡</span><span class="card-rank rank-beginner">Beginner</span></div>
+        <div class="card-body"><h3>Sensor Lab</h3><p>Environmental monitoring station using Arduino and various sensors.</p></div>
+        <div class="card-footer">View Manual →</div>
+      </a>
+      <a href="manual-template.html" class="technique-card">
+        <div class="card-header"><span class="card-icon">🖨️</span><span class="card-rank rank-intermediate">Intermediate</span></div>
+        <div class="card-body"><h3>3D Printer Mods</h3><p>Systematic upgrades to an Ender 3: direct drive, BLTouch, Klipper.</p></div>
+        <div class="card-footer">View Manual →</div>
+      </a>
+    </div>
+    <div style="text-align:center;margin-top:3rem;">
+      <a href="techniques.html" class="btn btn-outline">View All Techniques →</a>
+    </div>
+  </div>
+</section>
+
+<section class="path-section" id="path">
+  <div class="container">
+    <span class="section-label">▸ The Way of Cultivation</span>
+    <h2 class="section-title">Path of Cultivation</h2>
+    <div class="section-divider"></div>
+    <div style="max-width:640px;">
+      <div class="path-steps">
+        <div class="path-step"><div class="step-node">🌱</div><div class="step-content"><div class="step-number">Stage I</div><h3>Outer Disciple</h3><p>Begin by studying existing Techniques and completing your first beginner project.</p></div></div>
+        <div class="path-step"><div class="step-node">⚡</div><div class="step-content"><div class="step-number">Stage II</div><h3>Core Disciple</h3><p>You may now document Techniques and access deeper sections of the Forge.</p></div></div>
+        <div class="path-step"><div class="step-node">🔥</div><div class="step-content"><div class="step-number">Stage III</div><h3>Elder</h3><p>Elders guide new disciples and review Technique submissions.</p></div></div>
+        <div class="path-step"><div class="step-node">👑</div><div class="step-content"><div class="step-number">Stage IV</div><h3>Sect Leader</h3><p>The apex of cultivation. Shapes the direction of the Iron Foundry.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="join-section" id="join">
+  <div class="container">
+    <div class="join-box">
+      <span class="section-label" style="text-align:center;display:block;">▸ Begin Your Journey</span>
+      <h2 class="section-title">Join the Sect</h2>
+      <p>Every master builder was once a beginner with a soldering iron and a dream. Register to claim your rank as an <strong style="color:var(--accent-gold)">Outer Disciple</strong>.</p>
+      <button class="btn btn-primary" id="hero-join">⚙ Register Now</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">⚙ Iron Foundry Sect</div>
+  <div class="footer-links">
+    <a href="index.html">Home</a><a href="techniques.html">Techniques</a>
+    <a href="forge.html">The Forge</a><a href="sect.html">The Sect</a>
+  </div>
+  <p class="footer-copy">© Iron Foundry Sect — Forged in the fires of creation.</p>
+</footer>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="modal-login">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-login')">✕</button>
+    <div class="modal-title">Return to the Forge</div>
+    <div class="modal-subtitle">▸ Disciple Login</div>
+    <form id="login-form">
+      <div class="form-group"><label>Email</label><input type="email" id="login-email" placeholder="your@email.com" required /></div>
+      <div class="form-group"><label>Password</label><input type="password" id="login-password" placeholder="••••••••" required /></div>
+      <div class="form-error" id="login-error"></div>
+      <button type="submit" class="btn btn-primary w-full mt-2">Enter the Sect</button>
+    </form>
+    <div class="modal-switch">New here? <a onclick="closeModal('modal-login');openModal('modal-register')">Join the Sect →</a></div>
+  </div>
+</div>
+
+<!-- REGISTER MODAL -->
+<div class="modal-overlay" id="modal-register">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-register')">✕</button>
+    <div class="modal-title">Begin Cultivation</div>
+    <div class="modal-subtitle">▸ Register as Outer Disciple</div>
+    <form id="register-form">
+      <div class="form-group"><label>Username</label><input type="text" id="reg-username" placeholder="Choose your sect name" required /></div>
+      <div class="form-group"><label>Email</label><input type="email" id="reg-email" placeholder="your@email.com" required /></div>
+      <div class="form-group"><label>Password</label><input type="password" id="reg-password" placeholder="Min 6 characters" required /></div>
+      <div class="form-error" id="reg-error"></div>
+      <button type="submit" class="btn btn-primary w-full mt-2">⚙ Join the Sect</button>
+    </form>
+    <div class="modal-switch">Already a disciple? <a onclick="closeModal('modal-register');openModal('modal-login')">Login →</a></div>
+  </div>
+</div>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>
