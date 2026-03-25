@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manual — Iron Foundry Sect</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .edit-toolbar{background:var(--bg-secondary);border:1px solid var(--border-accent);padding:0.75rem 1.25rem;border-radius:2px;margin-bottom:2rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
+    .edit-label{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent-gold);}
+    .inline-edit{background:var(--bg-tertiary);border:1px solid var(--accent-gold);color:var(--text-primary);padding:0.4rem 0.75rem;font-family:inherit;font-size:inherit;border-radius:2px;outline:none;width:100%;}
+    .inline-textarea{background:var(--bg-tertiary);border:1px solid var(--accent-gold);color:var(--text-primary);padding:0.6rem 0.75rem;font-family:var(--font-body);font-size:0.95rem;border-radius:2px;outline:none;width:100%;resize:vertical;}
+    .item-row{display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0.75rem;background:var(--bg-tertiary);border:1px solid var(--border);border-radius:2px;margin-bottom:0.5rem;transition:border-color 0.2s;}
+    .item-row:hover{border-color:var(--border-accent);}
+    .item-icon{color:var(--accent-gold);font-size:1rem;flex-shrink:0;}
+    .item-text{flex:1;color:var(--text-secondary);font-size:0.9rem;}
+    .item-link{font-family:var(--font-mono);font-size:0.75rem;color:var(--accent-gold);text-decoration:none;flex-shrink:0;}
+    .item-link:hover{text-decoration:underline;}
+    .item-delete{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:0.8rem;opacity:0;transition:all 0.2s;}
+    .item-row:hover .item-delete{opacity:1;}
+    .item-delete:hover{color:#ff4444;}
+    .add-row{display:flex;gap:0.5rem;margin-top:0.5rem;}
+    .add-input{flex:1;background:var(--bg-tertiary);border:1px solid var(--border);color:var(--text-primary);padding:0.5rem 0.75rem;font-family:var(--font-body);font-size:0.85rem;border-radius:2px;outline:none;}
+    .add-input:focus{border-color:var(--accent-gold);}
+    .add-btn{font-family:var(--font-mono);font-size:0.75rem;padding:0.5rem 1rem;border:1px solid var(--accent-gold);background:rgba(200,134,10,0.1);color:var(--accent-gold);cursor:pointer;border-radius:2px;transition:all 0.2s;white-space:nowrap;}
+    .add-btn:hover{background:var(--accent-gold);color:#000;}
+    .save-pill{font-family:var(--font-mono);font-size:0.7rem;color:#4caf50;opacity:0;transition:opacity 0.3s;margin-left:auto;}
+    .save-pill.show{opacity:1;}
+    .section-actions{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;}
+    .section-edit-btn{font-family:var(--font-mono);font-size:0.7rem;padding:0.2rem 0.6rem;border:1px solid var(--border-accent);background:transparent;color:var(--accent-gold);cursor:pointer;border-radius:2px;transition:all 0.2s;}
+    .section-edit-btn:hover{background:var(--accent-gold);color:#000;}
+    .step-item{display:flex;gap:1rem;padding:1rem 1.25rem;background:var(--bg-tertiary);border:1px solid var(--border);border-radius:2px;margin-bottom:0.75rem;transition:border-color 0.2s;cursor:pointer;}
+    .step-item:hover{border-color:var(--border-accent);}
+    .step-num-badge{width:28px;height:28px;background:var(--accent-gold);color:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:0.75rem;font-weight:700;flex-shrink:0;}
+    .link-row{display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0.75rem;background:var(--bg-tertiary);border:1px solid var(--border);border-radius:2px;margin-bottom:0.5rem;}
+    .link-text{flex:1;font-family:var(--font-mono);font-size:0.85rem;}
+  </style>
+</head>
+<body>
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">⚙ <span>Iron Foundry</span> Sect</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="techniques.html">Techniques</a></li>
+    <li><a href="blog.html">Scrolls</a></li>
+    <li><a href="members.html">Members</a></li>
+    <li><a href="forge.html">The Forge</a></li>
+    <li><a href="sect.html">The Sect</a></li>
+    <li><a href="profile.html" id="profile-nav-link" style="display:none;">Profile</a></li>
+    <li><a href="sect.html#admin" id="admin-nav-link" style="display:none;">⚙ Admin</a></li>
+  </ul>
+  <div class="nav-auth">
+    <div id="user-display"></div>
+    <button class="btn-nav" id="btn-login" onclick="openModal('modal-login')">Login</button>
+    <button class="btn-nav btn-nav-solid" id="btn-join" onclick="openModal('modal-register')">Join Sect</button>
+    <button class="btn-nav" id="btn-logout" style="display:none;">Logout</button>
+    <div class="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<div class="manual-layout" id="manual-layout">
+  <aside class="manual-sidebar">
+    <div class="manual-nav">
+      <h4>▸ Sections</h4>
+      <a href="#overview">Overview</a>
+      <a href="#parts">Parts List</a>
+      <a href="#tools">Tools Needed</a>
+      <a href="#steps">Build Steps</a>
+      <a href="#diagrams">Diagrams</a>
+      <a href="#code">Source Code</a>
+      <a href="#outcome">Outcome</a>
+    </div>
+    <div style="margin-top:1rem;">
+      <a href="techniques.html" class="btn btn-outline" style="width:100%;text-align:center;font-size:0.75rem;">← All Techniques</a>
+    </div>
+    <div class="save-pill" id="save-pill" style="text-align:center;margin-top:0.75rem;">✓ Saved</div>
+  </aside>
+
+  <main id="manual-main">
+    <p style="color:var(--text-muted);font-family:var(--font-mono);">Loading manual...</p>
+  </main>
+</div>
+
+<footer>
+  <div class="footer-logo">⚙ Iron Foundry Sect</div>
+  <div id="footer-socials" style="display:flex;justify-content:center;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;"></div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="techniques.html">Techniques</a>
+    <a href="blog.html">Scrolls</a>
+    <a href="about.html">About Us</a>
+    <a href="resources.html">Resources</a>
+  </div>
+  <p style="color:var(--text-muted);font-family:var(--font-mono);font-size:0.75rem;margin-top:0.5rem;">
+    Questions? Reach us at <a href="mailto:contact@ironfoundrysect.com" style="color:var(--accent-gold);text-decoration:none;">contact@ironfoundrysect.com</a>
+  </p>
+  <p class="footer-copy">© Iron Foundry Sect — Forged in the fires of creation.</p>
+</footer>
+
+<div class="modal-overlay" id="modal-login">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-login')">✕</button>
+    <div class="modal-title">Welcome Back</div>
+    <div class="modal-subtitle">▸ Good to see you again, disciple</div>
+    <form id="login-form">
+      <div class="form-group"><label>Email</label><input type="email" id="login-email" placeholder="your@email.com" required /></div>
+      <div class="form-group"><label>Password</label><input type="password" id="login-password" placeholder="••••••••" required /></div>
+      <div class="form-error" id="login-error"></div>
+      <button type="submit" class="btn btn-primary w-full mt-2">Enter the Sect</button>
+    </form>
+    <div class="modal-switch">New around here? <a onclick="closeModal('modal-login');openModal('modal-register')">Join the sect →</a></div>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-register">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-register')">✕</button>
+    <div class="modal-title">Join the Iron Foundry</div>
+    <div class="modal-subtitle">▸ Start your cultivation journey</div>
+    <form id="register-form">
+      <div class="form-group"><label>Your Sect Name</label><input type="text" id="reg-username" placeholder="What should we call you?" required /></div>
+      <div class="form-group"><label>Email</label><input type="email" id="reg-email" placeholder="your@email.com" required /></div>
+      <div class="form-group"><label>Password</label><input type="password" id="reg-password" placeholder="At least 6 characters" required /></div>
+      <div class="form-group"><label>Confirm Password</label><input type="password" id="reg-confirm" placeholder="Same thing again" required /></div>
+      <div class="form-error" id="reg-error"></div>
+      <button type="submit" class="btn btn-primary w-full mt-2">⚙ Begin Cultivation</button>
+    </form>
+    <div class="modal-switch">Already a disciple? <a onclick="closeModal('modal-register');openModal('modal-login')">Log back in →</a></div>
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script type="module" src="script.js"></script>
+<script type="module">
+import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+const params   = new URLSearchParams(window.location.search);
+const manualId = params.get('id') || 'autonomous-rover';
+
+const DEFAULT = {
+  title: 'Autonomous Rover',
+  rank: 'Advanced', category: 'Robotics', author: 'SectLeader',
+  purpose: "This one's a self-navigating wheeled robot that dodges obstacles on its own using ultrasonic sensors. It's a great project if you want to get into robotics — you'll cover motor control, sensor wiring, and writing basic decision logic. Expect to spend a few weekends on it, but it's worth every hour.",
+  parts: [
+    { name: 'Arduino Uno R3', note: 'or compatible board like Nano or Mega', link: '' },
+    { name: 'L298N Motor Driver', note: 'dual H-bridge for controlling the DC motors', link: '' },
+    { name: 'HC-SR04 Ultrasonic Sensors ×3', note: 'front, left, and right', link: '' },
+    { name: 'DC Gear Motors ×4 + Wheels', note: 'TT motors work great for this', link: '' },
+    { name: '18650 Battery Pack (7.4V)', note: 'with XT60 connector and a switch', link: '' },
+    { name: 'Chassis Frame', note: 'acrylic or 3D printed, min 20×15cm', link: '' },
+    { name: 'Jumper Wires + Breadboard', note: '', link: '' },
+  ],
+  tools: [
+    { name: 'Soldering Iron', note: 'for any permanent connections', link: '' },
+    { name: 'Wire Strippers', note: '', link: '' },
+    { name: 'Multimeter', note: 'to check your wiring before powering on', link: '' },
+    { name: 'Arduino IDE', note: 'free download at arduino.cc', link: 'https://www.arduino.cc/en/software' },
+    { name: 'USB-A to USB-B Cable', note: 'to flash code to the Arduino', link: '' },
+    { name: 'Zip Ties + Double-Sided Tape', note: 'for mounting everything securely', link: '' },
+  ],
+  steps: [
+    { title: 'Assemble the chassis', content: 'Mount all four gear motors to the corners of your frame. Bolt them down tight — loose motors will mess with your straight-line driving later. Attach the wheels and make sure everything spins freely before moving on.' },
+    { title: 'Wire up the motor driver', content: 'Connect your motor pairs to OUT1/OUT2 and OUT3/OUT4 on the L298N. Run ENA and ENB to PWM pins 5 and 6 on the Arduino, and IN1–IN4 to digital pins 7, 8, 9, 10.' },
+    { title: 'Mount and wire the sensors', content: 'Stick your three HC-SR04 sensors at the front, left-front, and right-front. Each one needs VCC to 5V and GND to ground. Wire TRIG/ECHO pairs to pins 2/3 (front), 4/5 (left), and 11/12 (right).' },
+    { title: 'Upload the firmware', content: 'Clone the repo below, open rover_main.ino in Arduino IDE, select your board and COM port, then hit upload. Easy.' },
+    { title: 'Power on and tune it', content: 'Connect your battery and open Serial Monitor at 9600 baud. Watch the distance readings. If it stops too early or too late, tweak the OBSTACLE_DISTANCE value until it feels right.' },
+    { title: 'Test in open space', content: 'Give it room to move. Watch how it handles corners and walls. If it pulls left or right when going straight, you probably need to balance your motor speeds in the code.' },
+  ],
+  githubLink: 'https://github.com',
+  codeSnippet: '#define OBSTACLE_DISTANCE 20\n\nvoid loop() {\n  int dist = readSensor(TRIG_F, ECHO_F);\n  if (dist < OBSTACLE_DISTANCE) {\n    stopMotors(); delay(300); turnRight();\n  } else {\n    moveForward();\n  }\n}',
+  outcome: "The rover ended up navigating a simple maze with about 92% success — pretty solid for a first version. Biggest lesson: even slightly mismatched motors cause it to drift. Mount your sensors at a slight downward angle too, they have a blind spot under 2cm. Version 2 should add encoders for proper speed control.",
+};
+
+let data = null;
+let isEditor = false;
+let saveTimer = null;
+
+async function waitForFirebase(maxWait = 5000) {
+  const start = Date.now();
+  while (!window._ifs?.db) {
+    if (Date.now() - start > maxWait) throw new Error('Firebase not ready');
+    await new Promise(r => setTimeout(r, 100));
+  }
+}
+
+async function init() {
+  try {
+    await waitForFirebase();
+    isEditor = window.canEdit && window.canEdit();
+    const snap = await getDoc(doc(window._ifs.db, 'manuals', manualId));
+    data = snap.exists() ? snap.data() : { ...DEFAULT };
+    if (!snap.exists() && isEditor) {
+      await setDoc(doc(window._ifs.db, 'manuals', manualId), { ...DEFAULT, createdAt: serverTimestamp() });
+    }
+  } catch(e) {
+    data = { ...DEFAULT };
+  }
+  render();
+  loadSocials();
+}
+
+window.addEventListener('authStateChanged', () => {
+  const newIsEditor = window.canEdit && window.canEdit();
+  if (newIsEditor !== isEditor) { isEditor = newIsEditor; render(); }
+});
+
+init();
+
+function render() {
+  const main = document.getElementById('manual-main');
+  if (!data) return;
+
+  const ed = isEditor;
+  const editHint = ed ? 'style="cursor:pointer;" title="Click to edit"' : '';
+
+  main.innerHTML = `
+    ${ed ? `<div class="edit-toolbar"><span class="edit-label">✏️ Editor Mode</span><span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted);">Click any text to edit. Changes auto-save.</span></div>` : ''}
+
+    <div class="manual-section" id="overview">
+      <div class="manual-meta" style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.5rem;">
+        <div class="meta-chip">Technique: <span style="color:var(--accent-gold)">${data.title}</span></div>
+        <div class="meta-chip">Rank: <span style="color:var(--accent-gold)">${data.rank}</span></div>
+        <div class="meta-chip">Category: <span style="color:var(--accent-gold)">${data.category}</span></div>
+      </div>
+      <div class="section-actions">
+        <h2 style="font-family:var(--font-display);font-size:1.4rem;color:var(--accent-gold);">What's this project?</h2>
+        ${ed ? `<button class="section-edit-btn" onclick="editText('purpose')">✏️ Edit</button>` : ''}
+      </div>
+      <div id="field-purpose" ${editHint} onclick="${ed ? "editText('purpose')" : ''}">
+        <p style="color:var(--text-secondary);line-height:1.8;">${data.purpose || ''}</p>
+      </div>
+    </div>
+
+    <div class="manual-section" id="parts">
+      <div class="section-actions">
+        <h2 style="font-family:var(--font-display);font-size:1.4rem;color:var(--accent-gold);">Parts You'll Need</h2>
+      </div>
+      <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1rem;">Grab all of these before you start. Links go to where you can buy them.</p>
+      <div id="parts-list">
+        ${(data.parts||[]).map((p,i) => `
+          <div class="item-row" id="part-${i}">
+            <span class="item-icon">🔩</span>
+            <div style="flex:1;">
+              <div class="item-text" style="font-weight:600;color:var(--text-primary);">${p.name}</div>
+              ${p.note ? `<div style="font-size:0.82rem;color:var(--text-muted);">${p.note}</div>` : ''}
+            </div>
+            ${p.link ? `<a href="${p.link}" target="_blank" class="item-link">Buy →</a>` : (ed ? `<span style="font-family:var(--font-mono);font-size:0.72rem;color:var(--text-muted);">no link yet</span>` : '')}
+            ${ed ? `<button class="item-delete" onclick="deletePart(${i})">✕</button>` : ''}
+          </div>
+        `).join('')}
+      </div>
+      ${ed ? `
+        <div class="add-row" style="margin-top:1rem;flex-wrap:wrap;gap:0.5rem;">
+          <input class="add-input" id="new-part-name" placeholder="Part name" style="min-width:180px;" />
+          <input class="add-input" id="new-part-note" placeholder="Note (optional)" style="min-width:140px;" />
+          <input class="add-input" id="new-part-link" placeholder="Buy link (optional)" style="min-width:180px;" />
+          <button class="add-btn" onclick="addPart()">+ Add Part</button>
+        </div>
+      ` : ''}
+    </div>
+
+    <div class="manual-section" id="tools">
+      <div class="section-actions">
+        <h2 style="font-family:var(--font-display);font-size:1.4rem;color:var(--accent-gold);">Tools You'll Need</h2>
+      </div>
+      <div id="tools-list">
+        ${(data.tools||[]).map((t,i) => `
+          <div class="item-row" id="tool-${i}">
+            <span class="item-icon">🔧</span>
+            <div style="flex:1;">
+              <div class="item-text" style="font-weight:600;color:var(--text-primary);">${t.name}</div>
+              ${t.note ? `<div style="font-size:0.82rem;color:var(--text-muted);">${t.note}</div>` : ''}
+            </div>
+            ${t.link ? `<a href="${t.link}" target="_blank" class="item-link">Get it →</a>` : (ed ? `<span style="font-family:var(--font-mono);font-size:0.72rem;color:var(--text-muted);">no link</span>` : '')}
+            ${ed ? `<button class="item-delete" onclick="deleteTool(${i})">✕</button>` : ''}
+          </div>
+        `).join('')}
+      </div>
+      ${ed ? `
+        <div class="add-row" style="margin-top:1rem;flex-wrap:wrap;gap:0.5rem;">
+          <input class="add-input" id="new-tool-name" placeholder="Tool name" style="min-width:180px;" />
+          <input class="add-input" id="new-tool-note" placeholder="Note (optional)" style="min-width:140px;" />
+          <input class="add-input" id="new-tool-link" placeholder="Link (optional)" style="min-width:180px;" />
+          <button class="add-btn" onclick="addTool()">+ Add Tool</button>
+        </div>
+      ` : ''}
+    </div>
+
+    <div class="manual-section" id="steps">
+      <div class="section-actions">
+        <h2 style="font-family:var(--font-display);font-size:1.4rem;color:var(--accent-gold);">How to Build It</h2>
+      </div>
+      <div id="steps-list">
+        ${(data.steps||[]).map((s,i) => `
+          <div class="step-item" id="step-${i}" ${ed ? `onclick="editStep(${i})"` : ''}>
+            <div class="step-num-badge">${i+1}</div>
+            <div style="flex:1;">
+              <div style="font-weight:600;margin-bottom:0.3rem;color:var(--text-primary);" id="step-title-${i}">${s.title}</div>
+              <div style="color:var(--text-muted);font-size:0.95rem;line-height:1.7;" id="step-content-${i}">${s.content}</div>
+            </div>
+            ${ed ? `<button class="item-delete" style="opacity:1;" onclick="event.stopPropagation();deleteStep(${i})">🗑</button>` : ''}
+          </div>
+        `).join('')}
+      </div>
+      ${ed ? `<button class="add-btn" style="width:100%;margin-top:0.5rem;" onclick="addStep()">+ Add Step</button>` : ''}
+    </div>
+
+    <div class="manual-section" id="diagrams">
+      <h2 style="font-family:var(--font-display);font-size:1.4rem;color:var(--accent-gold);">Diagrams & Photos</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin-top:1rem;">
+        <div style="background:var(--bg-tertiary);border:1px solid var(--border);aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-family:var(--font-mono);font-size:0.8rem;border-radius:2px;">[ Wiring Diagram ]</div>
+        <div style="background:var(--bg-tertiary);border:1px solid var(--border);aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-family:var(--font-mono);font-size:0.8rem;border-radius:2px;">[ Build Photo ]</div>
+      </div>
+    </div>
+
+    <div class="manual-section" id="code">
+      <div class="section-actions">
+        <h2 style="font-family:var(--font-display);font-size:1.4rem;color:var(--accent-gold);">Source Code</h2>
+        ${ed ? `<button class="section-edit-btn" onclick="editText('githubLink')">✏️ Edit Link</button>` : ''}
+      </div>
+      <a href="${data.githubLink||'#'}" target="_blank" class="btn btn-outline" style="margin-bottom:1rem;display:inline-flex;">🔗 View on GitHub</a>
+      <div id="field-codeSnippet" ${ed ? 'onclick="editText(\'codeSnippet\')"' : ''} ${editHint}>
+        <div class="code-block" style="white-space:pre-wrap;font-size:0.85rem;">${data.codeSnippet||''}</div>
+      </div>
+    </div>
+
+    <div class="manual-section" id="outcome">
+      <div class="section-actions">
+        <h2 style="font-family:var(--font-display);font-size:1.4rem;color:var(--accent-gold);">How It Went</h2>
+        ${ed ? `<button class="section-edit-btn" onclick="editText('outcome')">✏️ Edit</button>` : ''}
+      </div>
+      <div id="field-outcome" ${ed ? 'onclick="editText(\'outcome\')"' : ''} ${editHint}>
+        <p style="color:var(--text-secondary);line-height:1.8;">${data.outcome||''}</p>
+      </div>
+    </div>
+  `;
+}
+
+// ===== EDIT FUNCTIONS =====
+window.editText = function(field) {
+  if (!isEditor) return;
+  const container = document.getElementById('field-' + field);
+  if (!container || container.querySelector('textarea,input')) return;
+  const val = data[field] || '';
+  const isCode = field === 'codeSnippet';
+  container.innerHTML = `<textarea class="inline-textarea" rows="${isCode ? 8 : 4}" onblur="saveText('${field}', this.value)">${val}</textarea>`;
+  container.querySelector('textarea').focus();
+};
+
+window.saveText = function(field, val) {
+  data[field] = val;
+  autoSave();
+  render();
+};
+
+// Parts
+window.addPart = function() {
+  const name = document.getElementById('new-part-name')?.value.trim();
+  if (!name) return;
+  if (!data.parts) data.parts = [];
+  data.parts.push({ name, note: document.getElementById('new-part-note')?.value.trim()||'', link: document.getElementById('new-part-link')?.value.trim()||'' });
+  autoSave(); render();
+};
+window.deletePart = function(i) { data.parts.splice(i,1); autoSave(); render(); };
+
+// Tools
+window.addTool = function() {
+  const name = document.getElementById('new-tool-name')?.value.trim();
+  if (!name) return;
+  if (!data.tools) data.tools = [];
+  data.tools.push({ name, note: document.getElementById('new-tool-note')?.value.trim()||'', link: document.getElementById('new-tool-link')?.value.trim()||'' });
+  autoSave(); render();
+};
+window.deleteTool = function(i) { data.tools.splice(i,1); autoSave(); render(); };
+
+// Steps
+window.addStep = function() {
+  if (!data.steps) data.steps = [];
+  data.steps.push({ title: 'New step', content: 'Describe what to do here...' });
+  autoSave(); render();
+};
+window.deleteStep = function(i) {
+  if (!confirm('Remove this step?')) return;
+  data.steps.splice(i,1); autoSave(); render();
+};
+window.editStep = function(i) {
+  if (!isEditor) return;
+  const titleEl = document.getElementById('step-title-' + i);
+  const contentEl = document.getElementById('step-content-' + i);
+  if (!titleEl || titleEl.querySelector('input')) return;
+  titleEl.innerHTML = `<input class="inline-edit" type="text" value="${data.steps[i].title}" onblur="saveStep(${i},'title',this.value)" onkeydown="if(event.key==='Enter')this.blur()" />`;
+  contentEl.innerHTML = `<textarea class="inline-textarea" rows="3" onblur="saveStep(${i},'content',this.value)">${data.steps[i].content}</textarea>`;
+  titleEl.querySelector('input').focus();
+};
+window.saveStep = function(i, field, val) {
+  if (data.steps[i]) data.steps[i][field] = val;
+  autoSave(); render();
+};
+
+// Auto-save
+async function autoSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async () => {
+    try {
+      await waitForFirebase(2000);
+      await setDoc(doc(window._ifs.db, 'manuals', manualId), { ...data, updatedAt: serverTimestamp() }, { merge: true });
+      const pill = document.getElementById('save-pill');
+      if (pill) { pill.classList.add('show'); setTimeout(() => pill.classList.remove('show'), 2000); }
+    } catch(e) { console.error('Save failed', e); }
+  }, 800);
+}
+
+async function loadSocials() {
+  try {
+    await waitForFirebase(3000);
+    const snap = await getDoc(doc(window._ifs.db, 'settings', 'socials'));
+    if (!snap.exists()) return;
+    const d = snap.data();
+    const c = document.getElementById('footer-socials');
+    if (!c) return;
+    const links = [
+      d.discord   ? `<a href="${d.discord}"   target="_blank" style="color:var(--text-muted);font-family:var(--font-mono);font-size:0.75rem;text-decoration:none;" onmouseover="this.style.color='var(--accent-gold)'" onmouseout="this.style.color='var(--text-muted)'">Discord</a>`   : '',
+      d.youtube   ? `<a href="${d.youtube}"   target="_blank" style="color:var(--text-muted);font-family:var(--font-mono);font-size:0.75rem;text-decoration:none;" onmouseover="this.style.color='var(--accent-gold)'" onmouseout="this.style.color='var(--text-muted)'">YouTube</a>`   : '',
+      d.instagram ? `<a href="${d.instagram}" target="_blank" style="color:var(--text-muted);font-family:var(--font-mono);font-size:0.75rem;text-decoration:none;" onmouseover="this.style.color='var(--accent-gold)'" onmouseout="this.style.color='var(--text-muted)'">Instagram</a>` : '',
+      d.twitter   ? `<a href="${d.twitter}"   target="_blank" style="color:var(--text-muted);font-family:var(--font-mono);font-size:0.75rem;text-decoration:none;" onmouseover="this.style.color='var(--accent-gold)'" onmouseout="this.style.color='var(--text-muted)'">Twitter/X</a>`   : '',
+    ].filter(Boolean);
+    c.innerHTML = links.join('<span style="color:var(--text-muted);">·</span>');
+  } catch(e) {}
+}
+</script>
+</body>
+</html>

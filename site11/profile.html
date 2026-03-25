@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile — Iron Foundry Sect</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙</text></svg>" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .profile-avatar-wrap { position:relative;width:120px;margin:0 auto 1.5rem; }
+    .profile-avatar-wrap img, .profile-avatar-placeholder { width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid var(--accent-gold);display:block; }
+    .profile-avatar-placeholder { background:var(--bg-tertiary);display:flex;align-items:center;justify-content:center;font-size:3rem;color:var(--accent-gold); }
+    .avatar-upload-btn { position:absolute;bottom:4px;right:4px;width:30px;height:30px;border-radius:50%;background:var(--accent-gold);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:#000;transition:background 0.2s; }
+    .avatar-upload-btn:hover { background:var(--accent-bright); }
+    .profile-card { background:var(--bg-secondary);border:1px solid var(--border);padding:2rem;border-radius:2px; }
+    .profile-stat { text-align:center;padding:1rem;background:var(--bg-tertiary);border:1px solid var(--border); }
+    .profile-stat-num { font-family:var(--font-display);font-size:1.8rem;color:var(--accent-gold);display:block; }
+    .profile-stat-label { font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted); }
+    .technique-tag { display:inline-flex;align-items:center;gap:0.4rem;background:var(--bg-tertiary);border:1px solid var(--border);padding:0.3rem 0.75rem;border-radius:2px;font-family:var(--font-mono);font-size:0.75rem;color:var(--text-secondary);margin:0.25rem; }
+    .remove-tag { cursor:pointer;color:var(--text-muted);font-size:0.7rem;transition:color 0.2s; }
+    .remove-tag:hover { color:#ff4444; }
+    .social-input-row { display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem; }
+    .social-icon { width:36px;height:36px;background:var(--bg-tertiary);border:1px solid var(--border);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0; }
+    .social-input { flex:1;background:var(--bg-tertiary);border:1px solid var(--border);color:var(--text-primary);padding:0.6rem 1rem;font-family:var(--font-mono);font-size:0.85rem;border-radius:2px;outline:none;width:100%; }
+    .social-input:focus { border-color:var(--accent-gold); }
+    .tabs { display:flex;border-bottom:1px solid var(--border);margin-bottom:2rem; }
+    .tab-btn { font-family:var(--font-mono);font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.75rem 1.5rem;background:none;border:none;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s; }
+    .tab-btn.active { color:var(--accent-gold);border-bottom-color:var(--accent-gold); }
+    .tab-btn:hover { color:var(--text-primary); }
+    .tab-panel { display:none; }
+    .tab-panel.active { display:block; }
+    .p-textarea { width:100%;background:var(--bg-tertiary);border:1px solid var(--border);color:var(--text-primary);padding:0.75rem 1rem;font-family:var(--font-body);font-size:0.95rem;border-radius:2px;outline:none;resize:vertical; }
+    .p-textarea:focus { border-color:var(--accent-gold); }
+    .p-input { width:100%;background:var(--bg-tertiary);border:1px solid var(--border);color:var(--text-primary);padding:0.75rem 1rem;font-family:var(--font-mono);font-size:0.85rem;border-radius:2px;outline:none; }
+    .p-input:focus { border-color:var(--accent-gold); }
+    @media(max-width:768px) { .profile-layout { grid-template-columns:1fr !important; } }
+  </style>
+</head>
+<body>
+
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">⚙ <span>Iron Foundry</span> Sect</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="techniques.html">Techniques</a></li>
+    <li><a href="forge.html">The Forge</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="resources.html">Resources</a></li>
+    <li><a href="sect.html">The Sect</a></li>
+    <li><a href="profile.html" id="profile-nav-link" class="hidden">Profile</a></li>
+    <li><a href="sect.html#admin" id="admin-nav-link" class="hidden">⚙ Admin</a></li>
+  </ul>
+  <div class="nav-auth">
+    <div id="user-display"></div>
+    <button class="btn-nav" id="btn-login" onclick="openModal('modal-login')">Login</button>
+    <button class="btn-nav btn-nav-solid" id="btn-join" onclick="openModal('modal-register')">Join Sect</button>
+    <button class="btn-nav hidden" id="btn-logout">Logout</button>
+    <div class="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-content">
+    <span class="section-label">▸ Disciple Records</span>
+    <h1 class="section-title">Your Profile</h1>
+    <p style="color:var(--text-secondary);max-width:500px;margin:0 auto;">Manage your identity within the Iron Foundry Sect.</p>
+  </div>
+</div>
+
+<section>
+  <div class="container">
+    <div id="profile-container">
+      <p style="color:var(--text-muted);font-family:var(--font-mono);">Loading your profile...</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">⚙ Iron Foundry Sect</div>
+  <div class="footer-links">
+    <a href="index.html">Home</a><a href="techniques.html">Techniques</a>
+    <a href="forge.html">The Forge</a><a href="sect.html">The Sect</a>
+  </div>
+  <p class="footer-copy">© Iron Foundry Sect — Forged in the fires of creation.</p>
+</footer>
+
+<div class="modal-overlay" id="modal-login">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-login')">✕</button>
+    <div class="modal-title">Welcome Back</div>
+    <div class="modal-subtitle">▸ Good to see you again, disciple</div>
+    <form id="login-form">
+      <div class="form-group"><label>Email</label><input type="email" id="login-email" placeholder="your@email.com" required /></div>
+      <div class="form-group"><label>Password</label><input type="password" id="login-password" placeholder="••••••••" required /></div>
+      <div class="form-error" id="login-error"></div>
+      <button type="submit" class="btn btn-primary w-full mt-2">Enter the Sect</button>
+    </form>
+    <div class="modal-switch">New around here? <a onclick="closeModal('modal-login');openModal('modal-register')">Join the sect →</a></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-register">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-register')">✕</button>
+    <div class="modal-title">Join the Iron Foundry</div>
+    <div class="modal-subtitle">▸ Start your cultivation journey</div>
+    <form id="register-form">
+      <div class="form-group"><label>Your Sect Name</label><input type="text" id="reg-username" placeholder="What should we call you?" required /></div>
+      <div class="form-group"><label>Email</label><input type="email" id="reg-email" placeholder="your@email.com" required /></div>
+      <div class="form-group"><label>Password</label><input type="password" id="reg-password" placeholder="At least 6 characters" required /></div>
+      <div class="form-group"><label>Confirm Password</label><input type="password" id="reg-confirm" placeholder="Same thing again" required /></div>
+      <div class="form-error" id="reg-error"></div>
+      <button type="submit" class="btn btn-primary w-full mt-2">⚙ Begin Cultivation</button>
+    </form>
+    <div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--text-muted);text-align:center;margin-top:0.75rem;">A verification email will be sent to confirm your address.</div>
+    <div class="modal-switch">Already a disciple? <a onclick="closeModal('modal-register');openModal('modal-login')">Log back in →</a></div>
+  </div>
+</div>
+
+<!-- Modal Bridge — makes openModal/closeModal available before module loads -->
+
+
+<script type="module" src="script.js"></script>
+<script type="module">
+import { auth, db, storage } from './firebase-config.js';
+import { onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+
+const ROLES = {
+  'outer-disciple': { label: 'Outer Disciple', class: 'role-outer' },
+  'core-disciple':  { label: 'Core Disciple',  class: 'role-core' },
+  'elder':          { label: 'Elder',           class: 'role-elder' },
+  'sect-leader':    { label: 'Sect Leader',     class: 'role-leader' },
+};
+
+let currentTechniques = [];
+let pendingPhotoFile = null;
+let currentUID = null;
+
+onAuthStateChanged(auth, async (user) => {
+  const container = document.getElementById('profile-container');
+  if (!user) {
+    container.innerHTML = `<div style="text-align:center;padding:4rem 0;">
+      <p style="color:var(--text-muted);font-family:var(--font-mono);margin-bottom:1.5rem;">You must be logged in to view your profile.</p>
+      <button class="btn btn-primary" onclick="openModal('modal-login')">Login</button>
+    </div>`;
+    return;
+  }
+  currentUID = user.uid;
+  const snap = await getDoc(doc(db, 'users', user.uid));
+  if (!snap.exists()) return;
+  const data = snap.data();
+  currentTechniques = data.techniques || [];
+  renderProfile(user, data);
+});
+
+function renderProfile(user, data) {
+  const container = document.getElementById('profile-container');
+  const roleInfo = ROLES[data.role] || ROLES['outer-disciple'];
+  const avatarHTML = data.photoURL
+    ? `<img id="avatar-preview" src="${data.photoURL}" alt="avatar">`
+    : `<div class="profile-avatar-placeholder" id="avatar-preview">${(data.username||'?').charAt(0).toUpperCase()}</div>`;
+
+  const socialLinks = [
+    data.github  ? `<a href="${data.github}"  target="_blank" class="social-link-display">⌥ GitHub</a>`  : '',
+    data.youtube ? `<a href="${data.youtube}" target="_blank" class="social-link-display">▶ YouTube</a>` : '',
+    data.twitter ? `<a href="${data.twitter}" target="_blank" class="social-link-display">✗ Twitter/X</a>` : '',
+    data.website ? `<a href="${data.website}" target="_blank" class="social-link-display">🔗 Website</a>` : '',
+  ].filter(Boolean).join('');
+
+  container.innerHTML = `
+    <style>
+      .social-link-display { color:var(--text-secondary);font-family:var(--font-mono);font-size:0.8rem;text-decoration:none;border:1px solid var(--border);padding:0.3rem 0.75rem;border-radius:2px;transition:all 0.2s; }
+      .social-link-display:hover { border-color:var(--accent-gold);color:var(--accent-gold); }
+    </style>
+    <div class="profile-layout" style="display:grid;grid-template-columns:300px 1fr;gap:2.5rem;align-items:start;">
+      <div>
+        <div class="profile-card" style="text-align:center;">
+          <div class="profile-avatar-wrap">
+            ${avatarHTML}
+            <button class="avatar-upload-btn" onclick="document.getElementById('photo-file-input').click()" title="Change photo">✏️</button>
+            <input type="file" id="photo-file-input" accept="image/*" style="display:none;" onchange="previewPhoto(event)" />
+          </div>
+          <h2 style="font-family:var(--font-display);font-size:1.4rem;letter-spacing:0.05em;margin-bottom:0.5rem;">${data.username}</h2>
+          <span class="role-badge ${roleInfo.class}" style="font-size:0.8rem;">${roleInfo.label}</span>
+          ${data.bio ? `<p style="color:var(--text-secondary);margin-top:1rem;font-size:0.9rem;line-height:1.6;">${data.bio}</p>` : ''}
+          ${socialLinks ? `<div style="margin-top:1.25rem;display:flex;justify-content:center;gap:0.5rem;flex-wrap:wrap;">${socialLinks}</div>` : ''}
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:1rem;">
+          <div class="profile-stat"><span class="profile-stat-num" id="tech-count">${currentTechniques.length}</span><span class="profile-stat-label">Techniques</span></div>
+          <div class="profile-stat"><span class="profile-stat-num" style="font-size:1rem;">${roleInfo.label.split(' ')[0]}</span><span class="profile-stat-label">Rank</span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="tabs">
+          <button class="tab-btn active" onclick="switchTab('edit')">✏️ Edit Profile</button>
+          <button class="tab-btn" onclick="switchTab('techniques')">📜 My Techniques</button>
+        </div>
+
+        <div class="tab-panel active" id="tab-edit">
+          <div id="profile-status" class="alert"></div>
+          <form onsubmit="saveProfile(event)">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <div class="form-group"><label>Username</label><input class="p-input" type="text" id="p-username" value="${data.username}" /></div>
+              <div class="form-group"><label>Display Email (optional)</label><input class="p-input" type="text" id="p-display-email" value="${data.displayEmail||''}" placeholder="shown publicly" /></div>
+            </div>
+            <div class="form-group"><label>Bio</label><textarea class="p-textarea" id="p-bio" rows="3" placeholder="Tell the sect about yourself...">${data.bio||''}</textarea></div>
+            <div class="section-label" style="margin-bottom:0.75rem;">▸ Social Links</div>
+            <div class="social-input-row"><div class="social-icon">⌥</div><input class="social-input" type="url" id="p-github" placeholder="https://github.com/username" value="${data.github||''}" /></div>
+            <div class="social-input-row"><div class="social-icon">▶</div><input class="social-input" type="url" id="p-youtube" placeholder="https://youtube.com/@channel" value="${data.youtube||''}" /></div>
+            <div class="social-input-row"><div class="social-icon">✗</div><input class="social-input" type="url" id="p-twitter" placeholder="https://twitter.com/username" value="${data.twitter||''}" /></div>
+            <div class="social-input-row"><div class="social-icon">🔗</div><input class="social-input" type="url" id="p-website" placeholder="https://yoursite.com" value="${data.website||''}" /></div>
+            <button type="submit" class="btn btn-primary mt-2">💾 Save Changes</button>
+          </form>
+        </div>
+
+        <div class="tab-panel" id="tab-techniques">
+          <p style="color:var(--text-secondary);font-size:0.95rem;margin-bottom:1.5rem;">List the techniques and projects you've built.</p>
+          <div id="techniques-tags" style="margin-bottom:1rem;">
+            ${currentTechniques.map(t => `<span class="technique-tag">⚙ ${t} <span class="remove-tag" onclick="removeTechnique('${t}')">✕</span></span>`).join('')}
+          </div>
+          <div style="display:flex;gap:0.75rem;">
+            <input class="p-input" type="text" id="technique-input" placeholder="e.g. Autonomous Rover" style="flex:1;" onkeydown="if(event.key==='Enter'){event.preventDefault();addTechnique();}" />
+            <button class="btn btn-outline" onclick="addTechnique()">+ Add</button>
+          </div>
+          <button class="btn btn-primary mt-2" onclick="saveTechniques(event)">💾 Save Techniques</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+window.switchTab = function(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', ['edit','techniques'][i] === tab));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(`tab-${tab}`)?.classList.add('active');
+}
+
+window.previewPhoto = function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  pendingPhotoFile = file;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const preview = document.getElementById('avatar-preview');
+    if (preview.tagName === 'IMG') { preview.src = ev.target.result; }
+    else { const img = document.createElement('img'); img.id='avatar-preview'; img.src=ev.target.result; img.style='width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid var(--accent-gold);display:block;'; preview.replaceWith(img); }
+  };
+  reader.readAsDataURL(file);
+}
+
+window.saveProfile = async function(e) {
+  e.preventDefault();
+  const user = auth.currentUser;
+  if (!user) return;
+  const statusEl = document.getElementById('profile-status');
+  try {
+    let photoURL = (await getDoc(doc(db, 'users', user.uid))).data().photoURL || '';
+    if (pendingPhotoFile) {
+      const storageRef = ref(storage, `avatars/${user.uid}`);
+      await uploadBytes(storageRef, pendingPhotoFile);
+      photoURL = await getDownloadURL(storageRef);
+      pendingPhotoFile = null;
+    }
+    const updates = {
+      username: document.getElementById('p-username').value.trim(),
+      bio: document.getElementById('p-bio').value.trim(),
+      github: document.getElementById('p-github').value.trim(),
+      youtube: document.getElementById('p-youtube').value.trim(),
+      twitter: document.getElementById('p-twitter').value.trim(),
+      website: document.getElementById('p-website').value.trim(),
+      displayEmail: document.getElementById('p-display-email').value.trim(),
+      photoURL,
+    };
+    await updateDoc(doc(db, 'users', user.uid), updates);
+    await updateProfile(user, { displayName: updates.username, photoURL });
+    statusEl.textContent = '✓ Profile saved!';
+    statusEl.className = 'alert alert-success show';
+    setTimeout(() => statusEl.classList.remove('show'), 3000);
+    const snap = await getDoc(doc(db, 'users', user.uid));
+    renderProfile(user, snap.data());
+  } catch(err) {
+    statusEl.textContent = 'Error: ' + err.message;
+    statusEl.className = 'alert alert-error show';
+  }
+}
+
+window.addTechnique = function() {
+  const input = document.getElementById('technique-input');
+  const val = input.value.trim();
+  if (!val || currentTechniques.includes(val)) return;
+  currentTechniques.push(val);
+  input.value = '';
+  refreshTechniqueTags();
+}
+
+window.removeTechnique = function(t) {
+  currentTechniques = currentTechniques.filter(x => x !== t);
+  refreshTechniqueTags();
+}
+
+function refreshTechniqueTags() {
+  document.getElementById('techniques-tags').innerHTML = currentTechniques.map(t => `<span class="technique-tag">⚙ ${t} <span class="remove-tag" onclick="removeTechnique('${t}')">✕</span></span>`).join('');
+  const el = document.getElementById('tech-count');
+  if (el) el.textContent = currentTechniques.length;
+}
+
+window.saveTechniques = async function(e) {
+  const user = auth.currentUser;
+  if (!user) return;
+  await updateDoc(doc(db, 'users', user.uid), { techniques: currentTechniques });
+  e.target.textContent = '✓ Saved!';
+  setTimeout(() => e.target.textContent = '💾 Save Techniques', 2000);
+}
+</script>
+</body>
+</html>
