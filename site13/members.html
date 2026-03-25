@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Members — Iron Foundry Sect</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙</text></svg>" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .members-tabs { display:flex;border-bottom:1px solid var(--border);margin-bottom:3rem; }
+    .members-tab { font-family:var(--font-mono);font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.85rem 1.75rem;background:none;border:none;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s; }
+    .members-tab.active { color:var(--accent-gold);border-bottom-color:var(--accent-gold); }
+    .members-tab:hover { color:var(--text-primary); }
+    .tab-content { display:none; }
+    .tab-content.active { display:block; }
+
+    /* Leaderboard */
+    .leaderboard { display:flex;flex-direction:column;gap:0.75rem;max-width:700px; }
+    .lb-row { display:flex;align-items:center;gap:1.25rem;padding:1.25rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:2px;transition:all 0.2s; }
+    .lb-row:hover { border-color:var(--border-accent); }
+    .lb-rank { font-family:var(--font-display);font-size:1.4rem;font-weight:900;width:40px;text-align:center;flex-shrink:0; }
+    .lb-rank.gold   { color:var(--accent-gold); }
+    .lb-rank.silver { color:#b0b0b0; }
+    .lb-rank.bronze { color:#cd7f32; }
+    .lb-rank.other  { color:var(--text-muted); }
+    .lb-avatar { width:44px;height:44px;border-radius:50%;background:var(--bg-tertiary);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.1rem;overflow:hidden;flex-shrink:0; }
+    .lb-avatar img { width:100%;height:100%;object-fit:cover; }
+    .lb-info { flex:1; }
+    .lb-name { font-family:var(--font-display);font-size:0.95rem;letter-spacing:0.03em;margin-bottom:0.2rem; }
+    .lb-score { font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted); }
+    .lb-points { font-family:var(--font-display);font-size:1.1rem;color:var(--accent-gold);font-weight:700; }
+
+    /* Elder spotlight */
+    .elder-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem; }
+    .elder-card { background:var(--bg-secondary);border:1px solid var(--border);padding:2rem;border-radius:2px;position:relative;overflow:hidden;transition:all 0.3s; }
+    .elder-card::before { content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gold-gradient);transform:scaleX(0);transition:transform 0.3s; }
+    .elder-card:hover { border-color:var(--border-accent); }
+    .elder-card:hover::before { transform:scaleX(1); }
+    .elder-avatar { width:80px;height:80px;border-radius:50%;border:3px solid var(--accent-gold);margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-size:2rem;background:var(--bg-tertiary);overflow:hidden; }
+    .elder-avatar img { width:100%;height:100%;object-fit:cover; }
+
+    /* MOTM */
+    .motm-card { max-width:500px;margin:0 auto;background:var(--bg-secondary);border:2px solid var(--accent-gold);padding:3rem;text-align:center;position:relative;border-radius:2px; }
+    .motm-card::before { content:'👑';position:absolute;top:-1.2rem;left:50%;transform:translateX(-50%);font-size:2rem;background:var(--bg-primary);padding:0 0.5rem; }
+    .motm-avatar { width:100px;height:100px;border-radius:50%;border:3px solid var(--accent-gold);margin:0 auto 1.25rem;display:flex;align-items:center;justify-content:center;font-size:2.5rem;background:var(--bg-tertiary);overflow:hidden; }
+    .motm-avatar img { width:100%;height:100%;object-fit:cover; }
+    .motm-edit { margin-top:1.5rem; }
+
+    /* All members */
+    .all-members-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem; }
+    .all-member-card { background:var(--bg-card);border:1px solid var(--border);padding:1.25rem;border-radius:2px;text-align:center;transition:all 0.3s; }
+    .all-member-card:hover { border-color:var(--border-accent);transform:translateY(-2px); }
+    .all-member-avatar { width:56px;height:56px;border-radius:50%;background:var(--bg-tertiary);border:2px solid var(--border);margin:0 auto 0.75rem;display:flex;align-items:center;justify-content:center;font-size:1.25rem;overflow:hidden; }
+    .all-member-avatar img { width:100%;height:100%;object-fit:cover; }
+  </style>
+</head>
+<body>
+
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">⚙ <span>Iron Foundry</span> Sect</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="techniques.html">Techniques</a></li>
+    <li><a href="blog.html">Scrolls</a></li>
+    <li><a href="members.html">Members</a></li>
+    <li><a href="forge.html">The Forge</a></li>
+    <li><a href="sect.html">The Sect</a></li>
+    <li><a href="profile.html" id="profile-nav-link" style="display:none;">Profile</a></li>
+    <li><a href="sect.html#admin" id="admin-nav-link" style="display:none;">⚙ Admin</a></li>
+  </ul>
+  <div class="nav-auth">
+    <div id="user-display"></div>
+    <button class="btn-nav" id="btn-login" onclick="openModal('modal-login')">Login</button>
+    <button class="btn-nav btn-nav-solid" id="btn-join" onclick="openModal('modal-register')">Join Sect</button>
+    <button class="btn-nav" id="btn-logout" style="display:none;" onclick="handleLogout && handleLogout()">Logout</button>
+    <div class="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-content">
+    <span class="section-label">▸ Brotherhood of Iron</span>
+    <h1 class="section-title">Members</h1>
+    <p style="color:var(--text-secondary);max-width:500px;margin:0 auto;">The disciples, elders, and leaders who forge the future of engineering.</p>
+  </div>
+</div>
+
+<section>
+  <div class="container">
+    <div class="members-tabs">
+      <button class="members-tab active" onclick="switchTab('motm')">👑 Member of the Month</button>
+      <button class="members-tab" onclick="switchTab('leaderboard')">🏆 Leaderboard</button>
+      <button class="members-tab" onclick="switchTab('elders')">🔥 Elder Spotlight</button>
+      <button class="members-tab" onclick="switchTab('all')">⚙ All Members</button>
+    </div>
+
+    <!-- MOTM -->
+    <div class="tab-content active" id="tab-motm">
+      <div style="text-align:center;margin-bottom:2rem;">
+        <span class="section-label">▸ Honored Disciple</span>
+        <h2 class="section-title">Member of the Month</h2>
+        <div class="section-divider" style="margin:0 auto 2rem;"></div>
+      </div>
+      <div id="motm-container">
+        <p style="text-align:center;color:var(--text-muted);font-family:var(--font-mono);">Loading...</p>
+      </div>
+    </div>
+
+    <!-- LEADERBOARD -->
+    <div class="tab-content" id="tab-leaderboard">
+      <div style="margin-bottom:2rem;">
+        <span class="section-label">▸ Top Builders</span>
+        <h2 class="section-title">Contribution Leaderboard</h2>
+        <div class="section-divider"></div>
+        <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:2rem;">Ranked by number of techniques built. Keep forging to climb the ranks.</p>
+      </div>
+      <div class="leaderboard" id="leaderboard-container">
+        <p style="color:var(--text-muted);font-family:var(--font-mono);">Loading...</p>
+      </div>
+    </div>
+
+    <!-- ELDERS -->
+    <div class="tab-content" id="tab-elders">
+      <div style="margin-bottom:2rem;">
+        <span class="section-label">▸ Masters of the Craft</span>
+        <h2 class="section-title">Elder Spotlight</h2>
+        <div class="section-divider"></div>
+        <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:2rem;">The veteran builders who guide the sect. Earn this rank through demonstrated mastery.</p>
+      </div>
+      <div class="elder-grid" id="elder-container">
+        <p style="color:var(--text-muted);font-family:var(--font-mono);">Loading...</p>
+      </div>
+    </div>
+
+    <!-- ALL MEMBERS -->
+    <div class="tab-content" id="tab-all">
+      <div style="margin-bottom:2rem;">
+        <span class="section-label">▸ The Full Roster</span>
+        <h2 class="section-title">All Members</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div id="all-members-container">
+        <p style="color:var(--text-muted);font-family:var(--font-mono);">Loading...</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">⚙ Iron Foundry Sect</div>
+  <div id="footer-socials" style="display:flex;justify-content:center;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;"></div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="techniques.html">Techniques</a>
+    <a href="blog.html">Scrolls</a>
+    <a href="members.html">Members</a>
+    <a href="forge.html">The Forge</a>
+    <a href="sect.html">The Sect</a>
+    <a href="about.html">About Us</a>
+    <a href="resources.html">Resources</a>
+  </div>
+  <p style="color:var(--text-muted);font-family:var(--font-mono);font-size:0.75rem;margin-top:0.5rem;">
+    Questions? <a href="mailto:contact@ironfoundrysect.com" style="color:var(--accent-gold);text-decoration:none;">contact@ironfoundrysect.com</a>
+  </p>
+  <p class="footer-copy">© Iron Foundry Sect — Forged in the fires of creation.</p>
+</footer>
+
+<div class="modal-overlay" id="modal-login">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-login')">✕</button>
+    <div class="modal-title">Welcome Back</div>
+    <div class="modal-subtitle">▸ Good to see you again, disciple</div>
+    <form id="login-form">
+      <div class="form-group"><label>Email</label><input type="email" id="login-email" placeholder="your@email.com" required /></div>
+      <div class="form-group"><label>Password</label><input type="password" id="login-password" placeholder="••••••••" required /></div>
+      <div class="form-error" id="login-error"></div>
+      <button type="submit" class="btn btn-primary w-full mt-2">Enter the Sect</button>
+    </form>
+    <div class="modal-switch">New around here? <a onclick="closeModal('modal-login');openModal('modal-register')">Join the sect →</a></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-register">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-register')">✕</button>
+    <div class="modal-title">Join the Iron Foundry</div>
+    <div class="modal-subtitle">▸ Start your cultivation journey</div>
+    <form id="register-form">
+      <div class="form-group"><label>Your Sect Name</label><input type="text" id="reg-username" placeholder="What should we call you?" required /></div>
+      <div class="form-group"><label>Email</label><input type="email" id="reg-email" placeholder="your@email.com" required /></div>
+      <div class="form-group"><label>Password</label><input type="password" id="reg-password" placeholder="At least 6 characters" required /></div>
+      <div class="form-group"><label>Confirm Password</label><input type="password" id="reg-confirm" placeholder="Same thing again" required /></div>
+      <div class="form-error" id="reg-error"></div>
+      <button type="submit" class="btn btn-primary w-full mt-2">⚙ Begin Cultivation</button>
+    </form>
+    <div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--text-muted);text-align:center;margin-top:0.75rem;">A verification email will be sent to confirm your address.</div>
+    <div class="modal-switch">Already a disciple? <a onclick="closeModal('modal-register');openModal('modal-login')">Log back in →</a></div>
+  </div>
+</div>
+
+<!-- Modal Bridge — makes openModal/closeModal available before module loads -->
+
+
+<script type="module" src="script.js"></script>
+<script type="module">
+import { auth, db } from './firebase-config.js';
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { collection, getDocs, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+const ROLES = {
+  'outer-disciple': { label:'Outer Disciple', class:'role-outer' },
+  'core-disciple':  { label:'Core Disciple',  class:'role-core' },
+  'elder':          { label:'Elder',           class:'role-elder' },
+  'sect-leader':    { label:'Sect Leader',     class:'role-leader' },
+};
+
+let allUsers = [];
+let currentUserData = null;
+
+// Use auth.js event
+window.addEventListener('authStateChanged', function() {
+  currentUserData = window._ifs?.currentUserData || null;
+});
+loadAllData();
+
+async function loadAllData() {
+  var waited = 0;
+  while (!window._ifs?.db && waited < 5000) {
+    await new Promise(r => setTimeout(r, 100));
+    waited += 100;
+  }
+  var db = window._ifs?.db;
+  if (!db) return;
+  const snap = await getDocs(collection(db, 'users'));
+  allUsers = snap.docs.map(d => d.data());
+  renderLeaderboard();
+  renderElders();
+  renderAllMembers();
+  renderMOTM();
+  loadSocials();
+}
+
+function avatarHTML(user, size=44) {
+  return user.photoURL
+    ? `<img src="${user.photoURL}" style="width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;">`
+    : `<span style="font-size:${size*0.4}px;">${(user.username||'?').charAt(0).toUpperCase()}</span>`;
+}
+
+function renderLeaderboard() {
+  const container = document.getElementById('leaderboard-container');
+  const sorted = [...allUsers]
+    .map(u => ({ ...u, score: (u.techniques||[]).length }))
+    .sort((a,b) => b.score - a.score)
+    .slice(0, 10);
+
+  if (!sorted.length) { container.innerHTML = '<p style="color:var(--text-muted);font-family:var(--font-mono);">No members yet.</p>'; return; }
+
+  const rankClass = (i) => i===0?'gold':i===1?'silver':i===2?'bronze':'other';
+  const rankDisplay = (i) => i===0?'🥇':i===1?'🥈':i===2?'🥉':`#${i+1}`;
+
+  container.innerHTML = sorted.map((u,i) => `
+    <div class="lb-row">
+      <div class="lb-rank ${rankClass(i)}">${rankDisplay(i)}</div>
+      <div class="lb-avatar">${avatarHTML(u,44)}</div>
+      <div class="lb-info">
+        <div class="lb-name">${u.username}</div>
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-top:0.2rem;">
+          <span class="role-badge ${ROLES[u.role]?.class||'role-outer'}" style="font-size:0.6rem;">${ROLES[u.role]?.label||'Outer Disciple'}</span>
+          <span class="lb-score">${u.score} technique${u.score!==1?'s':''} built</span>
+        </div>
+      </div>
+      <div class="lb-points">${u.score} pts</div>
+    </div>
+  `).join('');
+}
+
+function renderElders() {
+  const container = document.getElementById('elder-container');
+  const elders = allUsers.filter(u => u.role === 'elder' || u.role === 'sect-leader');
+  if (!elders.length) { container.innerHTML = '<p style="color:var(--text-muted);font-family:var(--font-mono);">No elders yet. Keep cultivating your skills.</p>'; return; }
+
+  container.innerHTML = elders.map(u => {
+    const roleInfo = ROLES[u.role] || ROLES['outer-disciple'];
+    return `
+      <div class="elder-card" style="text-align:center;">
+        <div class="elder-avatar">${avatarHTML(u,80)}</div>
+        <h3 style="font-family:var(--font-display);font-size:1.1rem;letter-spacing:0.05em;margin-bottom:0.4rem;">${u.username}</h3>
+        <span class="role-badge ${roleInfo.class}" style="font-size:0.75rem;">${roleInfo.label}</span>
+        ${u.bio ? `<p style="color:var(--text-secondary);font-size:0.9rem;margin-top:1rem;line-height:1.6;">${u.bio}</p>` : ''}
+        ${(u.techniques||[]).length ? `<div style="margin-top:1rem;font-family:var(--font-mono);font-size:0.75rem;color:var(--accent-gold);">⚙ ${u.techniques.length} techniques built</div>` : ''}
+        <div style="margin-top:1rem;display:flex;justify-content:center;gap:0.5rem;flex-wrap:wrap;">
+          ${u.github  ? `<a href="${u.github}"  target="_blank" style="font-family:var(--font-mono);font-size:0.7rem;color:var(--text-muted);text-decoration:none;border:1px solid var(--border);padding:0.2rem 0.5rem;border-radius:2px;transition:all 0.2s;" onmouseover="this.style.color='var(--accent-gold)'" onmouseout="this.style.color='var(--text-muted)'">⌥ GitHub</a>` : ''}
+          ${u.youtube ? `<a href="${u.youtube}" target="_blank" style="font-family:var(--font-mono);font-size:0.7rem;color:var(--text-muted);text-decoration:none;border:1px solid var(--border);padding:0.2rem 0.5rem;border-radius:2px;transition:all 0.2s;" onmouseover="this.style.color='var(--accent-gold)'" onmouseout="this.style.color='var(--text-muted)'">▶ YouTube</a>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+async function renderMOTM() {
+  const container = document.getElementById('motm-container');
+  const snap = await getDoc(doc(db, 'settings', 'motm'));
+  const isLeader = currentUserData?.role === 'sect-leader';
+
+  let motmUser = null;
+  if (snap.exists() && snap.data().uid) {
+    motmUser = allUsers.find(u => u.uid === snap.data().uid);
+  }
+
+  if (!motmUser) {
+    container.innerHTML = `
+      <div class="motm-card">
+        <p style="color:var(--text-muted);font-family:var(--font-mono);font-size:0.85rem;margin-bottom:1.5rem;">No member of the month selected yet.</p>
+        ${isLeader ? `<div class="motm-edit">${motmSelectHTML()}</div>` : ''}
+      </div>
+    `;
+    return;
+  }
+
+  const roleInfo = ROLES[motmUser.role] || ROLES['outer-disciple'];
+  container.innerHTML = `
+    <div class="motm-card">
+      <div class="motm-avatar">${avatarHTML(motmUser, 100)}</div>
+      <h2 style="font-family:var(--font-display);font-size:1.6rem;letter-spacing:0.05em;margin-bottom:0.4rem;">${motmUser.username}</h2>
+      <span class="role-badge ${roleInfo.class}" style="font-size:0.8rem;">${roleInfo.label}</span>
+      ${motmUser.bio ? `<p style="color:var(--text-secondary);margin-top:1.25rem;font-size:0.95rem;line-height:1.7;">${motmUser.bio}</p>` : ''}
+      ${(motmUser.techniques||[]).length ? `<div style="margin-top:1rem;font-family:var(--font-mono);font-size:0.8rem;color:var(--accent-gold);">⚙ ${motmUser.techniques.length} techniques built</div>` : ''}
+      ${isLeader ? `<div class="motm-edit">${motmSelectHTML(motmUser.uid)}</div>` : ''}
+    </div>
+  `;
+}
+
+function motmSelectHTML(currentUID='') {
+  const options = allUsers.map(u => `<option value="${u.uid}" ${u.uid===currentUID?'selected':''}>${u.username}</option>`).join('');
+  return `
+    <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);">
+      <div style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.2em;color:var(--text-muted);margin-bottom:0.75rem;text-transform:uppercase;">▸ Set Member of the Month</div>
+      <div style="display:flex;gap:0.75rem;justify-content:center;">
+        <select id="motm-select" style="background:var(--bg-tertiary);border:1px solid var(--border);color:var(--text-primary);padding:0.5rem 0.75rem;font-family:var(--font-mono);font-size:0.8rem;border-radius:2px;outline:none;cursor:pointer;">${options}</select>
+        <button class="btn btn-primary" onclick="saveMOTM()" style="font-size:0.75rem;padding:0.5rem 1rem;">Save</button>
+      </div>
+    </div>
+  `;
+}
+
+window.saveMOTM = async function() {
+  const uid = document.getElementById('motm-select').value;
+  await setDoc(doc(window._ifs.db, 'settings', 'motm'), { uid });
+  renderMOTM();
+}
+
+
+function renderAllMembers() {
+  const container = document.getElementById('all-members-container');
+  const byRole = { 'sect-leader':[], 'elder':[], 'core-disciple':[], 'outer-disciple':[] };
+  allUsers.forEach(u => (byRole[u.role]||byRole['outer-disciple']).push(u));
+
+  const roleConfig = [
+    { key:'sect-leader',    label:'Sect Leader',      badge:'role-leader', icon:'👑' },
+    { key:'elder',          label:'Elders',            badge:'role-elder',  icon:'🔥' },
+    { key:'core-disciple',  label:'Core Disciples',    badge:'role-core',   icon:'⚡' },
+    { key:'outer-disciple', label:'Outer Disciples',   badge:'role-outer',  icon:'🌱' },
+  ];
+
+  let html = '';
+  roleConfig.forEach(({ key, label, badge, icon }) => {
+    const members = byRole[key];
+    if (!members.length) return;
+    html += `
+      <div style="margin-bottom:3rem;">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.25rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border);">
+          <span style="font-size:1.25rem;">${icon}</span>
+          <h3 style="font-family:var(--font-display);font-size:1.1rem;letter-spacing:0.05em;">${label}</h3>
+          <span class="role-badge ${badge}">${members.length}</span>
+        </div>
+        <div class="all-members-grid">
+          ${members.map(u => `
+            <div class="all-member-card">
+              <div class="all-member-avatar">${avatarHTML(u,56)}</div>
+              <div style="font-family:var(--font-display);font-size:0.9rem;letter-spacing:0.03em;margin-bottom:0.35rem;">${u.username}</div>
+              ${u.bio ? `<p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.5rem;line-height:1.4;">${u.bio.length>60?u.bio.substring(0,60)+'...':u.bio}</p>` : ''}
+              <span class="role-badge ${badge}" style="font-size:0.6rem;">${ROLES[u.role]?.label||'Outer Disciple'}</span>
+              ${(u.techniques||[]).length ? `<div style="font-family:var(--font-mono);font-size:0.7rem;color:var(--accent-gold);margin-top:0.4rem;">⚙ ${u.techniques.length} built</div>` : ''}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  });
+
+  if (!allUsers.length) html = '<p style="color:var(--text-muted);font-family:var(--font-mono);">No members yet.</p>';
+  container.innerHTML = html;
+}
+
+async function loadSocials() {
+  const snap = await getDoc(doc(db, 'settings', 'socials'));
+  if (!snap.exists()) return;
+  const data = snap.data();
+  const container = document.getElementById('footer-socials');
+  const links = [
+    data.discord   ? `<a href="${data.discord}"   target="_blank" style="color:var(--text-muted);font-family:var(--font-mono);font-size:0.75rem;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--accent-gold)'" onmouseout="this.style.color='var(--text-muted)'">Discord</a>` : '',
+    data.youtube   ? `<a href="${data.youtube}"   target="_blank" style="color:var(--text-muted);font-family:var(--font-mono);font-size:0.75rem;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--accent-gold)'" onmouseout="this.style.color='var(--text-muted)'">YouTube</a>` : '',
+    data.instagram ? `<a href="${data.instagram}" target="_blank" style="color:var(--text-muted);font-family:var(--font-mono);font-size:0.75rem;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--accent-gold)'" onmouseout="this.style.color='var(--text-muted)'">Instagram</a>` : '',
+    data.twitter   ? `<a href="${data.twitter}"   target="_blank" style="color:var(--text-muted);font-family:var(--font-mono);font-size:0.75rem;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--accent-gold)'" onmouseout="this.style.color='var(--text-muted)'">Twitter/X</a>` : '',
+  ].filter(Boolean);
+  container.innerHTML = links.join('<span style="color:var(--text-muted);">·</span>');
+}
+
+window.switchTab = function(tab) {
+  document.querySelectorAll('.members-tab').forEach((b,i) => b.classList.toggle('active', ['motm','leaderboard','elders','all'][i]===tab));
+  document.querySelectorAll('.tab-content').forEach(p => p.classList.remove('active'));
+  document.getElementById(`tab-${tab}`)?.classList.add('active');
+}
+</script>
+</body>
+</html>
